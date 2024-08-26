@@ -1,3 +1,5 @@
+import { AuditLogManager } from '../../../audit-logs/providers/audit-logs-manager';
+import { AuthManager } from '../../../auth/providers/auth-manager';
 import { IdTranslator } from '../../../shared/providers/id-translator';
 import { TargetManager } from '../../providers/target-manager';
 import type { MutationResolvers } from './../../../../__generated__/types.next';
@@ -27,6 +29,28 @@ export const deleteTarget: NonNullable<MutationResolvers['deleteTarget']> = asyn
     project: projectId,
     target: targetId,
   });
+
+  // Audit Log Event
+  try {
+    const currentUser = await injector.get(AuthManager).getCurrentUser();
+    await injector.get(AuditLogManager).createLogAuditEvent({
+      eventType: 'TARGET_DELETED',
+      organizationId: target.orgId,
+      user: {
+        userId: currentUser.id,
+        userEmail: currentUser.email,
+        user: currentUser,
+      },
+      targetDeletedAuditLogSchema: {
+        projectId: target.projectId,
+        targetId: target.id,
+        targetName: target.name,
+      },
+    });
+  } catch (error) {
+    console.error('Failed to create audit log event', error);
+  }
+
   return {
     selector: {
       organization: organizationId,

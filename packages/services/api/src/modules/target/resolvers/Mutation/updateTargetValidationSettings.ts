@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { AuditLogManager } from '../../../audit-logs/providers/audit-logs-manager';
+import { AuthManager } from '../../../auth/providers/auth-manager';
 import { OrganizationManager } from '../../../organization/providers/organization-manager';
 import { IdTranslator } from '../../../shared/providers/id-translator';
 import { TargetManager } from '../../providers/target-manager';
@@ -48,6 +50,33 @@ export const updateTargetValidationSettings: NonNullable<
     targets: result.data.targets,
     excludedClients: result.data.excludedClients ?? [],
   });
+
+  // Audit Log Event
+  try {
+    const currentUser = await injector.get(AuthManager).getCurrentUser();
+
+    await injector.get(AuditLogManager).createLogAuditEvent({
+      eventType: 'TARGET_SETTINGS_UPDATED',
+      organizationId: organization,
+      user: {
+        userId: currentUser.id,
+        userEmail: currentUser.email,
+        user: currentUser,
+      },
+      targetSettingsUpdatedAuditLogSchema: {
+        projectId: project,
+        targetId: target,
+        updatedFields: JSON.stringify({
+          period: input.period,
+          percentage: input.percentage,
+          targets: result.data.targets,
+          excludedClients: result.data.excludedClients ?? [],
+        }),
+      },
+    });
+  } catch (error) {
+    console.error('Failed to create audit log event', error);
+  }
 
   return {
     ok: {

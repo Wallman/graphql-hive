@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { AuditLogManager } from '../../../audit-logs/providers/audit-logs-manager';
+import { AuthManager } from '../../../auth/providers/auth-manager';
 import { OrganizationManager } from '../../../organization/providers/organization-manager';
 import { IdTranslator } from '../../../shared/providers/id-translator';
 import { TargetManager } from '../../../target/providers/target-manager';
@@ -62,6 +64,26 @@ export const createProject: NonNullable<MutationResolvers['createProject']> = as
       organization: organizationId,
     }),
   ]);
+
+  // Audit Log Event
+  try {
+    const currentUser = await injector.get(AuthManager).getCurrentUser();
+    await injector.get(AuditLogManager).createLogAuditEvent({
+      eventType: 'PROJECT_CREATED',
+      organizationId: organizationId,
+      user: {
+        userId: currentUser.id,
+        userEmail: currentUser.email,
+        user: currentUser,
+      },
+      projectCreatedAuditLogSchema: {
+        projectId: project.id,
+        projectName: project.name,
+      },
+    });
+  } catch (error) {
+    console.error('Failed to create audit log event', error);
+  }
 
   return {
     ok: {
