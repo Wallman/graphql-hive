@@ -3,6 +3,7 @@ describe('preflight script', () => {
     cy.task('deleteUser')
     cy.task('createUser').then(result => {
       cy.task('createOrganization', result.sAccessToken)
+      cy.task('createProject', result.sAccessToken)
     })
   });
 
@@ -14,6 +15,6 @@ describe('preflight script', () => {
 
 
   it('should be visitable', () => {
-    cy.visit('/');
+    cy.visit('/foo/my-new-project/development/laboratory');
   });
 });

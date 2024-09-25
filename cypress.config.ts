@@ -148,6 +148,43 @@ COMMIT;
           }
           return data;
         },
+        async createProject(token) {
+          const response = await fetch('http://localhost:3001/graphql', {
+            method: 'POST',
+            headers: {
+              authorization: `Bearer ${token}`,
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              operationName: 'CreateProject',
+              query: /* GraphQL */ `
+                mutation CreateProject($input: CreateProjectInput!) {
+                  createProject(input: $input) {
+                    ok {
+                      createdProject {
+                        id
+                        name
+                        cleanId
+                      }
+                    }
+                  }
+                }
+              `,
+              variables: {
+                input: {
+                  name: 'My new Project',
+                  organization: 'foo',
+                  type: 'SINGLE',
+                },
+              },
+            }),
+          });
+          const { data, errors = [] } = await response.json();
+          if (!data || errors.length) {
+            throw new Error((errors as Error[]).map(error => error.message).join('\n'));
+          }
+          return data;
+        },
       });
 
       on('after:spec', (_, results) => {
