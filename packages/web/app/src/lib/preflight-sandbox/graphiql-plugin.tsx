@@ -160,6 +160,7 @@ function PreflightScriptContent() {
           size="icon-sm"
           className="size-auto gap-1"
           onClick={toggleShowModal}
+          data-cy="preflight-script-modal-button"
         >
           <Pencil1Icon className="shrink-0" />
           Edit
@@ -185,6 +186,9 @@ function PreflightScriptContent() {
           onChange={handleScriptChange}
           {...monacoProps.script}
           className={classes.monacoMini}
+          wrapperProps={{
+            ['data-cy']: 'preflight-script-editor-mini',
+          }}
           options={{
             ...monacoProps.script.options,
             lineNumbers: 'off',
@@ -193,7 +197,7 @@ function PreflightScriptContent() {
         />
       )}
 
-      <Title className="mt-6 flex gap-2">
+      <Title className="mt-6 flex items-center gap-2">
         Environment variables{' '}
         <Badge className="text-xs" variant="outline">
           JSON
@@ -206,6 +210,9 @@ function PreflightScriptContent() {
         onChange={handleEnvChange}
         {...monacoProps.env}
         className={classes.monacoMini}
+        wrapperProps={{
+          ['data-cy']: 'env-editor-mini',
+        }}
       />
     </>
   );
@@ -291,6 +298,7 @@ function PreflightScriptModal({
                 size="icon-sm"
                 className="size-auto"
                 onClick={handleRunScript}
+                data-cy="run-preflight-script"
               >
                 <TriangleRightIcon className="shrink-0" /> Run Script
               </Button>
@@ -303,6 +311,9 @@ function PreflightScriptModal({
                 ...monacoProps.script.options,
                 wordWrap: 'wordWrapColumn',
               }}
+              wrapperProps={{
+                ['data-cy']: 'preflight-script-editor',
+              }}
             />
           </div>
           <div className="flex h-[inherit] flex-col">
@@ -310,6 +321,7 @@ function PreflightScriptModal({
             <section
               ref={consoleRef}
               className='h-1/2 overflow-hidden overflow-y-scroll bg-[#10151f] py-2.5 pl-[26px] pr-2.5 font-[Menlo,Monaco,"Courier_New",monospace] text-xs/[18px]'
+              data-cy="console-output"
             >
               {logs.map((log, index) => {
                 let type = '';
@@ -360,6 +372,9 @@ function PreflightScriptModal({
                 ...monacoProps.env.options,
                 wordWrap: 'wordWrapColumn',
               }}
+              wrapperProps={{
+                ['data-cy']: 'env-editor',
+              }}
             />
           </div>
         </div>
@@ -369,10 +384,15 @@ function PreflightScriptModal({
             Changes made to this Preflight Script will apply to all users on your team using this
             variant.
           </p>
-          <Button type="button" onClick={toggle}>
+          <Button type="button" onClick={toggle} data-cy="preflight-script-modal-cancel">
             Close
           </Button>
-          <Button type="button" variant="primary" onClick={handleSubmit}>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={handleSubmit}
+            data-cy="preflight-script-modal-submit"
+          >
             Save
           </Button>
         </DialogFooter>

@@ -6,6 +6,12 @@ import pg from 'pg';
 
 const isCI = Boolean(process.env.CI);
 
+export type Token = {
+  sAccessToken: string;
+  sFrontToken: string;
+  sRefreshToken: string;
+};
+
 export default defineConfig({
   video: isCI,
   screenshotOnRunFailure: isCI,
@@ -83,11 +89,12 @@ COMMIT;
               `${response.status}: ${response.statusText}\n\n${JSON.stringify(data, null, 2)}`,
             );
           }
-          return {
-            sAccessToken: response.headers.get('st-access-token'),
-            sFrontToken: response.headers.get('front-token'),
-            sRefreshToken: response.headers.get('st-refresh-token'),
+          const result: Token = {
+            sAccessToken: response.headers.get('st-access-token')!,
+            sFrontToken: response.headers.get('front-token')!,
+            sRefreshToken: response.headers.get('st-refresh-token')!,
           };
+          return result;
         },
         async login() {
           const response = await fetch('http://localhost:3001/auth-api/signin', {
@@ -109,10 +116,10 @@ COMMIT;
             );
           }
 
-          const result = {
-            sAccessToken: response.headers.get('st-access-token'),
-            sFrontToken: response.headers.get('front-token'),
-            sRefreshToken: response.headers.get('st-refresh-token'),
+          const result: Token = {
+            sAccessToken: response.headers.get('st-access-token')!,
+            sFrontToken: response.headers.get('front-token')!,
+            sRefreshToken: response.headers.get('st-refresh-token')!,
           };
           return result;
         },
