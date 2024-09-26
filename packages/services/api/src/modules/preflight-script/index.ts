@@ -1,5 +1,5 @@
 import { createModule } from 'graphql-modules';
-import { CollectionProvider } from './providers/collection.provider';
+import { PreflightScriptProvider } from './providers/preflight-script.provider';
 import { resolvers } from './resolvers';
 import { typeDefs } from './module.graphql';
 
@@ -8,5 +8,5 @@ export const collectionModule = createModule({
   dirname: __dirname,
   typeDefs,
   resolvers,
-  providers: [CollectionProvider],
+  providers: [PreflightScriptProvider],
 });

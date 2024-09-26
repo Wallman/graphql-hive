@@ -7,7 +7,7 @@ import { TargetAccessScope } from '../auth/providers/scopes';
 import { IdTranslator } from '../shared/providers/id-translator';
 import { Storage } from '../shared/providers/storage';
 import { CollectionModule } from './__generated__/types';
-import { CollectionProvider } from './providers/collection.provider';
+import { PreflightScriptProvider } from './providers/preflight-script.provider';
 
 const MAX_INPUT_LENGTH = 5000;
 
@@ -69,14 +69,14 @@ export const resolvers: CollectionModule.Resolvers = {
     name: root => root.title,
     description: root => root.description,
     operations: (root, args, { injector }) =>
-      injector.get(CollectionProvider).getOperations(root.id, args.first, args.after),
+      injector.get(PreflightScriptProvider).getOperations(root.id, args.first, args.after),
   },
   DocumentCollectionOperation: {
     name: op => op.title,
     query: op => op.contents,
     async collection(op, args, { injector }) {
       const collection = await injector
-        .get(CollectionProvider)
+        .get(PreflightScriptProvider)
         .getCollection(op.documentCollectionId);
 
       // This should not happen, but we do want to flag this as an unexpected error.
@@ -89,11 +89,11 @@ export const resolvers: CollectionModule.Resolvers = {
   },
   Target: {
     documentCollections: (target, args, { injector }) =>
-      injector.get(CollectionProvider).getCollections(target.id, args.first, args.after),
+      injector.get(PreflightScriptProvider).getCollections(target.id, args.first, args.after),
     documentCollectionOperation: (_, args, { injector }) =>
-      injector.get(CollectionProvider).getOperation(args.id),
+      injector.get(PreflightScriptProvider).getOperation(args.id),
     documentCollection: (_, args, { injector }) =>
-      injector.get(CollectionProvider).getCollection(args.id),
+      injector.get(PreflightScriptProvider).getCollection(args.id),
   },
   Mutation: {
     async createDocumentCollection(_, { selector, input }, { injector }) {
@@ -102,7 +102,7 @@ export const resolvers: CollectionModule.Resolvers = {
         selector,
         TargetAccessScope.REGISTRY_WRITE,
       );
-      const result = await injector.get(CollectionProvider).createCollection(target.id, input);
+      const result = await injector.get(PreflightScriptProvider).createCollection(target.id, input);
 
       return {
         ok: {
@@ -118,7 +118,7 @@ export const resolvers: CollectionModule.Resolvers = {
         selector,
         TargetAccessScope.REGISTRY_WRITE,
       );
-      const result = await injector.get(CollectionProvider).updateCollection(input);
+      const result = await injector.get(PreflightScriptProvider).updateCollection(input);
 
       if (!result) {
         return {
@@ -143,7 +143,7 @@ export const resolvers: CollectionModule.Resolvers = {
         selector,
         TargetAccessScope.REGISTRY_WRITE,
       );
-      await injector.get(CollectionProvider).deleteCollection(id);
+      await injector.get(PreflightScriptProvider).deleteCollection(id);
 
       return {
         ok: {
@@ -161,9 +161,9 @@ export const resolvers: CollectionModule.Resolvers = {
           selector,
           TargetAccessScope.REGISTRY_WRITE,
         );
-        const result = await injector.get(CollectionProvider).createOperation(input);
+        const result = await injector.get(PreflightScriptProvider).createOperation(input);
         const collection = await injector
-          .get(CollectionProvider)
+          .get(PreflightScriptProvider)
           .getCollection(result.documentCollectionId);
 
         if (!result || !collection) {
@@ -204,7 +204,7 @@ export const resolvers: CollectionModule.Resolvers = {
           selector,
           TargetAccessScope.REGISTRY_WRITE,
         );
-        const result = await injector.get(CollectionProvider).updateOperation(input);
+        const result = await injector.get(PreflightScriptProvider).updateOperation(input);
 
         if (!result) {
           return {
@@ -216,7 +216,7 @@ export const resolvers: CollectionModule.Resolvers = {
         }
 
         const collection = await injector
-          .get(CollectionProvider)
+          .get(PreflightScriptProvider)
           .getCollection(result.documentCollectionId);
 
         return {
@@ -246,7 +246,7 @@ export const resolvers: CollectionModule.Resolvers = {
         selector,
         TargetAccessScope.REGISTRY_WRITE,
       );
-      const operation = await injector.get(CollectionProvider).getOperation(id);
+      const operation = await injector.get(PreflightScriptProvider).getOperation(id);
 
       if (!operation) {
         return {
@@ -258,9 +258,9 @@ export const resolvers: CollectionModule.Resolvers = {
       }
 
       const collection = await injector
-        .get(CollectionProvider)
+        .get(PreflightScriptProvider)
         .getCollection(operation.documentCollectionId);
-      await injector.get(CollectionProvider).deleteOperation(id);
+      await injector.get(PreflightScriptProvider).deleteOperation(id);
 
       return {
         ok: {

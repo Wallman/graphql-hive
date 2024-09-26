@@ -3,43 +3,10 @@ import { gql } from 'graphql-modules';
 export const typeDefs = gql`
   type DocumentCollection {
     id: ID!
-    name: String!
-    description: String
+    source_code: String!
     createdAt: DateTime!
     updatedAt: DateTime!
     createdBy: User!
-    operations(first: Int = 100, after: String = null): DocumentCollectionOperationsConnection!
-  }
-
-  type DocumentCollectionEdge {
-    node: DocumentCollection!
-    cursor: String!
-  }
-
-  type DocumentCollectionConnection {
-    edges: [DocumentCollectionEdge!]!
-    pageInfo: PageInfo!
-  }
-
-  type DocumentCollectionOperationsConnection {
-    edges: [DocumentCollectionOperationEdge!]!
-    pageInfo: PageInfo!
-  }
-
-  type DocumentCollectionOperation {
-    id: ID!
-    name: String!
-    query: String!
-    variables: String
-    headers: String
-    createdAt: DateTime!
-    updatedAt: DateTime!
-    collection: DocumentCollection!
-  }
-
-  type DocumentCollectionOperationEdge {
-    node: DocumentCollectionOperation!
-    cursor: String!
   }
 
   input CreateDocumentCollectionInput {
@@ -53,37 +20,7 @@ export const typeDefs = gql`
     description: String
   }
 
-  input CreateDocumentCollectionOperationInput {
-    collectionId: ID!
-    name: String!
-    query: String!
-    variables: String
-    headers: String
-  }
-
-  input UpdateDocumentCollectionOperationInput {
-    operationId: ID!
-    collectionId: ID!
-    name: String
-    query: String
-    variables: String
-    headers: String
-  }
-
   extend type Mutation {
-    createOperationInDocumentCollection(
-      selector: TargetSelectorInput!
-      input: CreateDocumentCollectionOperationInput!
-    ): ModifyDocumentCollectionOperationResult!
-    updateOperationInDocumentCollection(
-      selector: TargetSelectorInput!
-      input: UpdateDocumentCollectionOperationInput!
-    ): ModifyDocumentCollectionOperationResult!
-    deleteOperationInDocumentCollection(
-      selector: TargetSelectorInput!
-      id: ID!
-    ): DeleteDocumentCollectionOperationResult!
-
     createDocumentCollection(
       selector: TargetSelectorInput!
       input: CreateDocumentCollectionInput!
@@ -92,10 +29,6 @@ export const typeDefs = gql`
       selector: TargetSelectorInput!
       input: UpdateDocumentCollectionInput!
     ): ModifyDocumentCollectionResult!
-    deleteDocumentCollection(
-      selector: TargetSelectorInput!
-      id: ID!
-    ): DeleteDocumentCollectionResult!
   }
 
   type ModifyDocumentCollectionError implements Error {
