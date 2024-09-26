@@ -13,6 +13,7 @@ beforeEach(() => {
     cy.setCookie('sRefreshToken', result.sRefreshToken);
   });
   cy.visit('/foo/my-new-project/development/laboratory');
+  cy.get('[aria-label*="Preflight Script"]').click()
 });
 
 describe('Preflight Script', () => {
@@ -49,6 +50,7 @@ describe('Preflight Script Modal', () => {
     cy.dataCy('env-editor-mini').should('have.text', env);
     cy.dataCy('preflight-script-editor-mini').should('have.text', script);
     cy.reload();
+    cy.get('[aria-label*="Preflight Script"]').click()
     cy.dataCy('env-editor-mini').should('have.text', env);
     cy.dataCy('preflight-script-editor-mini').should('have.text', script);
   });
@@ -117,7 +119,7 @@ lab.environment.set('my-test', data)`,
 });
 
 describe('should replace headers with env', () => {
-  it.only('should work', () => {
+  it('should work', () => {
     cy.get('[data-name="headers"]').click();
     cy.get('.graphiql-editor-tool .graphiql-editor:last-child textarea').type(
       '{ "__test": "{{foo}} bar {{nonExist}}" }',
