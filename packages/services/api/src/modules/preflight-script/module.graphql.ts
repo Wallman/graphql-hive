@@ -1,97 +1,52 @@
 import { gql } from 'graphql-modules';
 
 export const typeDefs = gql`
-  type DocumentCollection {
+  type PreflightScript {
     id: ID!
-    source_code: String!
+    sourceCode: String!
     createdAt: DateTime!
     updatedAt: DateTime!
     createdBy: User!
   }
 
-  input CreateDocumentCollectionInput {
-    name: String!
-    description: String
+  input CreatePreflightScriptInput {
+    sourceCode: String!
   }
 
-  input UpdateDocumentCollectionInput {
-    collectionId: ID!
-    name: String!
-    description: String
+  input UpdatePreflightScriptInput {
+    id: ID!
+    sourceCode: String!
   }
 
   extend type Mutation {
-    createDocumentCollection(
+    createPreflightScript(
       selector: TargetSelectorInput!
-      input: CreateDocumentCollectionInput!
-    ): ModifyDocumentCollectionResult!
-    updateDocumentCollection(
+      input: CreatePreflightScriptInput!
+    ): ModifyPreflightScriptResult!
+    updatePreflightScript(
       selector: TargetSelectorInput!
-      input: UpdateDocumentCollectionInput!
-    ): ModifyDocumentCollectionResult!
+      input: UpdatePreflightScriptInput!
+    ): ModifyPreflightScriptResult!
   }
 
-  type ModifyDocumentCollectionError implements Error {
+  type ModifyPreflightScriptError implements Error {
     message: String!
   }
 
   """
   @oneOf
   """
-  type DeleteDocumentCollectionResult {
-    ok: DeleteDocumentCollectionOkPayload
+  type ModifyPreflightScriptResult {
+    ok: ModifyPreflightScriptOkPayload
     error: ModifyDocumentCollectionError
   }
 
-  type DeleteDocumentCollectionOkPayload {
-    updatedTarget: Target!
-    deletedId: ID!
-  }
-
-  """
-  @oneOf
-  """
-  type DeleteDocumentCollectionOperationResult {
-    ok: DeleteDocumentCollectionOperationOkPayload
-    error: ModifyDocumentCollectionError
-  }
-
-  type DeleteDocumentCollectionOperationOkPayload {
-    updatedTarget: Target!
-    updatedCollection: DocumentCollection!
-    deletedId: ID!
-  }
-
-  """
-  @oneOf
-  """
-  type ModifyDocumentCollectionResult {
-    ok: ModifyDocumentCollectionOkPayload
-    error: ModifyDocumentCollectionError
-  }
-
-  type ModifyDocumentCollectionOkPayload {
-    collection: DocumentCollection!
-    updatedTarget: Target!
-  }
-
-  """
-  @oneOf
-  """
-  type ModifyDocumentCollectionOperationResult {
-    ok: ModifyDocumentCollectionOperationOkPayload
-    error: ModifyDocumentCollectionError
-  }
-
-  type ModifyDocumentCollectionOperationOkPayload {
-    operation: DocumentCollectionOperation!
-    collection: DocumentCollection!
+  type ModifyPreflightScriptOkPayload {
+    preflightScript: PreflightScript!
     updatedTarget: Target!
   }
 
   extend type Target {
-    documentCollection(id: ID!): DocumentCollection
-    documentCollections(first: Int = 100, after: String = null): DocumentCollectionConnection!
-    documentCollectionOperation(id: ID!): DocumentCollectionOperation
+    preflightScript(id: ID!): PreflightScript
   }
 `;
