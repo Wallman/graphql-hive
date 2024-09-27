@@ -32,6 +32,7 @@ import type {
   OrganizationMemberRole,
   PaginatedDocumentCollectionOperations,
   PaginatedDocumentCollections,
+  PreflightScript,
   Project,
   Schema,
   SchemaLog,
@@ -39,7 +40,6 @@ import type {
   Target,
   TargetSettings,
   User,
-  PreflightScript
 } from '../../../shared/entities';
 import type { OrganizationAccessScope } from '../../auth/providers/organization-access';
 import type { ProjectAccessScope } from '../../auth/providers/project-access';
@@ -701,7 +701,6 @@ export interface Storage {
     createdByUserId: string | null;
   }): Promise<DocumentCollection>;
 
-
   getPreflightScript(_: { targetId: string }): Promise<PreflightScript | null>;
 
   createPreflightScript(_: {
@@ -710,10 +709,7 @@ export interface Storage {
     createdByUserId: string | null;
   }): Promise<PreflightScript>;
 
-  updatePreflightScript(_: {
-    id: string;
-    sourceCode: string;
-  }): Promise<PreflightScript | null>;
+  updatePreflightScript(_: { id: string; sourceCode: string }): Promise<PreflightScript | null>;
 
   /**
    * Returns null if the document collection does not exist (did not get deleted).

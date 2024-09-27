@@ -6,7 +6,7 @@ import { getStripePublicKey } from './stripe-public-key';
 export const HiveStripeWrapper = ({ children }: { children: ReactNode }): ReactElement => {
   const stripeRef = useRef<ReturnType<typeof loadStripe> | null>(null);
 
-  if (process.env.NODE_ENV === 'production' && !stripeRef.current) {
+  if (!stripeRef.current) {
     const stripePublicKey = getStripePublicKey();
     if (stripePublicKey) {
       stripeRef.current = loadStripe(stripePublicKey);

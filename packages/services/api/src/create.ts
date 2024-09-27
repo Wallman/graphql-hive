@@ -29,6 +29,7 @@ import {
   SCHEMA_POLICY_SERVICE_CONFIG,
   SchemaPolicyServiceConfig,
 } from './modules/policy/providers/tokens';
+import { preflightScriptModule } from './modules/preflight-script';
 import { projectModule } from './modules/project';
 import { rateLimitModule } from './modules/rate-limit';
 import {
@@ -61,7 +62,6 @@ import { supportModule } from './modules/support';
 import { provideSupportConfig, SupportConfig } from './modules/support/providers/config';
 import { targetModule } from './modules/target';
 import { tokenModule } from './modules/token';
-import { preflightScriptModule } from './modules/preflight-script';
 import { TOKENS_CONFIG, TokensConfig } from './modules/token/providers/tokens';
 import { usageEstimationModule } from './modules/usage-estimation';
 import {

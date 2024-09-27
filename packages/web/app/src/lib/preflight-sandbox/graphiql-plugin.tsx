@@ -91,12 +91,6 @@ export const preflightScriptPlugin: GraphiQLPlugin = {
   content: PreflightScriptContent,
 };
 
-const storageKey = {
-  script: 'preflightScript:script',
-  env: 'preflightScript:env',
-  disabled: 'preflightScript:disabled',
-};
-
 const classes = {
   monaco: clsx('*:bg-[#10151f]'),
   monacoMini: clsx('h-32 *:rounded-md *:bg-[#10151f]'),
