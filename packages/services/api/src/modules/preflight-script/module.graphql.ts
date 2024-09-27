@@ -6,7 +6,8 @@ export const typeDefs = gql`
     sourceCode: String!
     createdAt: DateTime!
     updatedAt: DateTime!
-    createdBy: User!
+    # TODO: should I add this field?
+    # createdBy: User!
   }
 
   input CreatePreflightScriptInput {
@@ -22,31 +23,31 @@ export const typeDefs = gql`
     createPreflightScript(
       selector: TargetSelectorInput!
       input: CreatePreflightScriptInput!
-    ): ModifyPreflightScriptResult!
+    ): PreflightScriptResult!
     updatePreflightScript(
       selector: TargetSelectorInput!
       input: UpdatePreflightScriptInput!
-    ): ModifyPreflightScriptResult!
-  }
-
-  type ModifyPreflightScriptError implements Error {
-    message: String!
+    ): PreflightScriptResult!
   }
 
   """
   @oneOf
   """
-  type ModifyPreflightScriptResult {
-    ok: ModifyPreflightScriptOkPayload
-    error: ModifyDocumentCollectionError
+  type PreflightScriptResult {
+    ok: PreflightScriptOkPayload
+    error: PreflightScriptError
   }
 
-  type ModifyPreflightScriptOkPayload {
+  type PreflightScriptOkPayload {
     preflightScript: PreflightScript!
     updatedTarget: Target!
   }
 
+  type PreflightScriptError implements Error {
+    message: String!
+  }
+
   extend type Target {
-    preflightScript(id: ID!): PreflightScript
+    preflightScript: PreflightScript
   }
 `;

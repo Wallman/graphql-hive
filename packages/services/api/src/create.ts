@@ -61,6 +61,7 @@ import { supportModule } from './modules/support';
 import { provideSupportConfig, SupportConfig } from './modules/support/providers/config';
 import { targetModule } from './modules/target';
 import { tokenModule } from './modules/token';
+import { preflightScriptModule } from './modules/preflight-script';
 import { TOKENS_CONFIG, TokensConfig } from './modules/token/providers/tokens';
 import { usageEstimationModule } from './modules/usage-estimation';
 import {
@@ -90,6 +91,7 @@ const modules = [
   schemaPolicyModule,
   collectionModule,
   appDeploymentsModule,
+  preflightScriptModule,
 ];
 
 export function createRegistry({

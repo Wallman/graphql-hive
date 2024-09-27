@@ -1,19 +1,17 @@
 import { Token } from '../../cypress.config';
 
-before(() => {
+beforeEach(() => {
   cy.task('deleteUser');
   cy.task<Token>('createUser').then(result => {
     cy.task('createOrganization', result.sAccessToken);
     cy.task('createProject', result.sAccessToken);
-  });
-});
-
-beforeEach(() => {
-  cy.task<Token>('login').then(result => {
     cy.setCookie('sRefreshToken', result.sRefreshToken);
   });
+  // cy.task<Token>('login').then(result => {
+  //   cy.setCookie('sRefreshToken', result.sRefreshToken);
+  // });
   cy.visit('/foo/my-new-project/development/laboratory');
-  cy.get('[aria-label*="Preflight Script"]').click()
+  cy.get('[aria-label*="Preflight Script"]').click();
 });
 
 describe('Preflight Script', () => {
@@ -45,23 +43,23 @@ describe('Preflight Script Modal', () => {
     });
   });
 
-  it('should save script and env variables in localStorage', () => {
+  it('should save script and env variables when submitting', () => {
     cy.dataCy('preflight-script-modal-submit').click();
     cy.dataCy('env-editor-mini').should('have.text', env);
     cy.dataCy('preflight-script-editor-mini').should('have.text', script);
     cy.reload();
-    cy.get('[aria-label*="Preflight Script"]').click()
+    cy.get('[aria-label*="Preflight Script"]').click();
     cy.dataCy('env-editor-mini').should('have.text', env);
     cy.dataCy('preflight-script-editor-mini').should('have.text', script);
   });
 
-  it('should not save script and env variables when not submitting', () => {
+  it("shouldn't save script and env variables when not submitting", () => {
     cy.dataCy('preflight-script-modal-cancel').click();
     cy.dataCy('env-editor-mini').should('have.text', '');
     cy.dataCy('preflight-script-editor-mini').should('have.text', '');
   });
 
-  it('should run script', () => {
+  it('should run script and show console/error output', () => {
     cy.dataCy('run-preflight-script').click();
     cy.dataCy('console-output').should('have.text', 'Log: Hello_world');
 
@@ -118,8 +116,8 @@ lab.environment.set('my-test', data)`,
   });
 });
 
-describe('should replace headers with env', () => {
-  it('should work', () => {
+describe('Execution', () => {
+  it('should replace with env editor values', () => {
     cy.get('[data-name="headers"]').click();
     cy.get('.graphiql-editor-tool .graphiql-editor:last-child textarea').type(
       '{ "__test": "{{foo}} bar {{nonExist}}" }',
@@ -138,6 +136,51 @@ describe('should replace headers with env', () => {
       expect(req.headers.__test).to.equal('injected bar {{nonExist}}');
     });
     cy.get('body').type('{ctrl}{enter}');
+  });
+
+  it('should execute script, update env editor and replace headers', () => {
+    cy.get('[data-name="headers"]').click();
+    cy.get('.graphiql-editor-tool .graphiql-editor:last-child textarea').type(
+      '{ "__test": "{{foo}}" }',
+      {
+        force: true,
+        parseSpecialCharSequences: false,
+      },
+    );
+    cy.dataCy('preflight-script-modal-button').click();
+    cy.dataCy('preflight-script-editor').within(() => {
+      cy.get('textarea').type(`lab.environment.set('foo', 92)`, { force: true });
+    });
+    cy.dataCy('preflight-script-modal-submit').click();
+    cy.intercept('/api/lab/foo/my-new-project/development', req => {
+      expect(req.headers.__test).to.equal('92');
+    });
+    cy.get('.graphiql-execute-button').click();
+  });
+
+  it('should not execute script if disabled', () => {
+    cy.get('[data-name="headers"]').click();
+    cy.get('.graphiql-editor-tool .graphiql-editor:last-child textarea').type(
+      '{ "__test": "{{foo}}" }',
+      {
+        force: true,
+        parseSpecialCharSequences: false,
+      },
+    );
+    cy.dataCy('preflight-script-modal-button').click();
+    cy.dataCy('preflight-script-editor').within(() => {
+      cy.get('textarea').type(`lab.environment.set('foo', 92)`, { force: true });
+    });
+    cy.dataCy('env-editor').within(() => {
+      cy.get('textarea').type(`{"foo":10}`, { force: true, parseSpecialCharSequences: false });
+    });
+    cy.dataCy('preflight-script-modal-submit').click();
+    cy.dataCy('disable-preflight-script').click();
+    cy.dataCy('preflight-script-editor-mini').should('not.exist');
+    cy.intercept('/api/lab/foo/my-new-project/development', req => {
+      expect(req.headers.__test).to.equal('10');
+    });
+    cy.get('.graphiql-execute-button').click();
   });
 });
 

@@ -2,7 +2,7 @@ import { Injectable, Scope } from 'graphql-modules';
 import { AuthManager } from '../../auth/providers/auth-manager';
 import { Logger } from '../../shared/providers/logger';
 import { Storage } from '../../shared/providers/storage';
-import type { CollectionModule } from './../__generated__/types';
+import type { PreflightScriptModule } from './../__generated__/types';
 
 @Injectable({
   global: true,
@@ -19,32 +19,27 @@ export class PreflightScriptProvider {
     this.logger = logger.child({ source: 'PreflightScriptProvider' });
   }
 
-  getCollection(id: string) {
-    return this.storage.getDocumentCollection({ id });
+  getPreflightScript(targetId: string) {
+    return this.storage.getPreflightScript({ targetId });
   }
 
-  async createCollection(
+  async createPreflightScript(
     targetId: string,
-    {
-      name,
-      description,
-    }: Pick<CollectionModule.CreateDocumentCollectionInput, 'description' | 'name'>,
+    { sourceCode }: PreflightScriptModule.CreatePreflightScriptInput,
   ) {
     const currentUser = await this.authManager.getCurrentUser();
 
-    return this.storage.createDocumentCollection({
+    return this.storage.createPreflightScript({
       createdByUserId: currentUser.id,
-      title: name,
-      description: description || '',
+      sourceCode,
       targetId,
     });
   }
 
-  updateCollection(input: CollectionModule.UpdateDocumentCollectionInput) {
-    return this.storage.updateDocumentCollection({
-      documentCollectionId: input.collectionId,
-      description: input.description || null,
-      title: input.name,
+  updatePreflightScript(input: PreflightScriptModule.UpdatePreflightScriptInput) {
+    return this.storage.updatePreflightScript({
+      id: input.id,
+      sourceCode: input.sourceCode,
     });
   }
 }

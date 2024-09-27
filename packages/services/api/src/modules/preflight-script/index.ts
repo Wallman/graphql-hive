@@ -3,7 +3,7 @@ import { PreflightScriptProvider } from './providers/preflight-script.provider';
 import { resolvers } from './resolvers.generated';
 import { typeDefs } from './module.graphql';
 
-export const collectionModule = createModule({
+export const preflightScriptModule = createModule({
   id: 'preflight-script',
   dirname: __dirname,
   typeDefs,

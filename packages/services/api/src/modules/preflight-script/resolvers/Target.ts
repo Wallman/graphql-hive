@@ -1,4 +1,5 @@
-import type { TargetResolvers } from './../../../__generated__/types.next';
+import type { TargetResolvers } from '../../../__generated__/types.next';
+import { PreflightScriptProvider } from '../providers/preflight-script.provider';
 
 /*
  * Note: This object type is generated because "TargetMapper" is declared. This is to ensure runtime safety.
@@ -10,8 +11,6 @@ import type { TargetResolvers } from './../../../__generated__/types.next';
  * If you want to skip this file generation, remove the mapper or update the pattern in the `resolverGeneration.object` config.
  */
 export const Target: Pick<TargetResolvers, 'preflightScript' | '__isTypeOf'> = {
-  /* Implement Target resolver logic here */
-  preflightScript: async (_parent, _arg, _ctx) => {
-    /* Target.preflightScript resolver is required because Target.preflightScript exists but TargetMapper.preflightScript does not */
-  },
+  preflightScript: (parent, _args, { injector }) =>
+    injector.get(PreflightScriptProvider).getPreflightScript(parent.id),
 };
