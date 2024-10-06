@@ -1,6 +1,7 @@
 import { gql } from 'graphql-modules';
 
 export const typeDefs = gql`
+  scalar DateTime
   interface AuditLog {
     id: ID!
     eventTime: DateTime!
