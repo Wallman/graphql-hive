@@ -2,7 +2,6 @@ import { gql } from 'graphql-modules';
 
 export const typeDefs = gql`
   scalar DateTime
-  scalar Date
   interface AuditLog {
     id: ID!
     eventTime: DateTime!
@@ -39,7 +38,7 @@ export const typeDefs = gql`
   }
 
   input AuditLogFilter {
-    date: Date
+    date: DateTime
     userId: String
     organizationId: String
     eventType: String
