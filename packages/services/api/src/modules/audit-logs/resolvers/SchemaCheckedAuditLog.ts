@@ -1,4 +1,4 @@
-import type { SchemaCheckedAuditLogResolvers } from './../../../__generated__/types';
+import { SchemaCheckedAuditLogResolvers } from '../../../__generated__/types';
 
 export const SchemaCheckedAuditLog: SchemaCheckedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'SCHEMA_CHECKED',

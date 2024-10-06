@@ -1,4 +1,4 @@
-import type { SchemaPublishAuditLogResolvers } from './../../../__generated__/types';
+import { SchemaPublishAuditLogResolvers } from '../../../__generated__/types';
 
 export const SchemaPublishAuditLog: SchemaPublishAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'SCHEMA_PUBLISH',

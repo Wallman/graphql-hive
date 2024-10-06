@@ -1,4 +1,4 @@
-import type { TargetSettingsUpdatedAuditLogResolvers } from './../../../__generated__/types';
+import { TargetSettingsUpdatedAuditLogResolvers } from '../../../__generated__/types';
 
 export const TargetSettingsUpdatedAuditLog: TargetSettingsUpdatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'TARGET_SETTINGS_UPDATED',

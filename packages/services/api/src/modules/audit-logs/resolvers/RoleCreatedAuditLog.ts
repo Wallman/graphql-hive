@@ -1,4 +1,4 @@
-import type { RoleCreatedAuditLogResolvers } from './../../../__generated__/types';
+import { RoleCreatedAuditLogResolvers } from '../../../__generated__/types';
 
 export const RoleCreatedAuditLog: RoleCreatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'ROLE_CREATED',

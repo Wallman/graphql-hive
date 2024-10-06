@@ -1,4 +1,4 @@
-import type { UserRemovedAuditLogResolvers } from './../../../__generated__/types';
+import { UserRemovedAuditLogResolvers } from '../../../__generated__/types';
 
 export const UserRemovedAuditLog: UserRemovedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'USER_REMOVED',

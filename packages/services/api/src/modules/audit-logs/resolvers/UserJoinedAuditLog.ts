@@ -1,4 +1,4 @@
-import type { UserJoinedAuditLogResolvers } from './../../../__generated__/types';
+import { UserJoinedAuditLogResolvers } from '../../../__generated__/types';
 
 export const UserJoinedAuditLog: UserJoinedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'USER_JOINED',

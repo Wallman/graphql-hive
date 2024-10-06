@@ -1,4 +1,4 @@
-import type { SchemaPolicySettingsUpdatedAuditLogResolvers } from './../../../__generated__/types';
+import { SchemaPolicySettingsUpdatedAuditLogResolvers } from '../../../__generated__/types';
 
 export const SchemaPolicySettingsUpdatedAuditLog: SchemaPolicySettingsUpdatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'SCHEMA_POLICY_SETTINGS_UPDATED',

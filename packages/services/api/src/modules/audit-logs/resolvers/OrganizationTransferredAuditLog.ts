@@ -1,4 +1,4 @@
-import type { OrganizationTransferredAuditLogResolvers } from './../../../__generated__/types';
+import { OrganizationTransferredAuditLogResolvers } from '../../../__generated__/types';
 
 export const OrganizationTransferredAuditLog: OrganizationTransferredAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'ORGANIZATION_TRANSFERRED',

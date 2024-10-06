@@ -1,4 +1,4 @@
-import type { ProjectDeletedAuditLogResolvers } from './../../../__generated__/types';
+import { ProjectDeletedAuditLogResolvers } from '../../../__generated__/types';
 
 export const ProjectDeletedAuditLog: ProjectDeletedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'PROJECT_DELETED',
