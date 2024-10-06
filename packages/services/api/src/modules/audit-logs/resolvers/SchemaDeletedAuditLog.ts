@@ -2,7 +2,10 @@ import { SchemaDeletedAuditLogResolvers } from '../../../__generated__/types';
 
 export const SchemaDeletedAuditLog: SchemaDeletedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'SCHEMA_DELETED',
-  eventTime: e => e.event_time,
+  eventTime: e => {
+    const time = new Date(e.event_time);
+    return time.toISOString();
+  },
   id: e => e.id,
   organizationId: e => e.organization_id,
   projectId: e => {

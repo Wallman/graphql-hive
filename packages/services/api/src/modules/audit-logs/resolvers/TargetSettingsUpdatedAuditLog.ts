@@ -2,7 +2,10 @@ import { TargetSettingsUpdatedAuditLogResolvers } from '../../../__generated__/t
 
 export const TargetSettingsUpdatedAuditLog: TargetSettingsUpdatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'TARGET_SETTINGS_UPDATED',
-  eventTime: e => e.event_time,
+  eventTime: e => {
+    const time = new Date(e.event_time);
+    return time.toISOString();
+  },
   id: e => e.id,
   organizationId: e => e.organization_id,
   projectId: e => {
