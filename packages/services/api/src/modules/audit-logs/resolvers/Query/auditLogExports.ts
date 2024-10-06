@@ -1,4 +1,4 @@
-import type { QueryResolvers } from './../../../../__generated__/types.next';
+import type { QueryResolvers } from './../../../../__generated__/types';
 
 // TODO: Implement Query.auditLogExports resolver
 export const auditLogExports: NonNullable<QueryResolvers['auditLogExports']> = async (
