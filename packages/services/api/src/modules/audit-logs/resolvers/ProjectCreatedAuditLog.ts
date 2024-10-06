@@ -32,6 +32,7 @@ export const ProjectCreatedAuditLog: ProjectCreatedAuditLogResolvers = {
     return {
       userEmail: parent.user_email,
       userId: parent.user_id,
+      user: JSON.parse(parent.metadata).user,
       __typename: 'AuditLogUserRecord',
     };
   },

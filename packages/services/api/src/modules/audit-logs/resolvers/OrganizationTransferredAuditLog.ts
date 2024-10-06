@@ -32,6 +32,7 @@ export const OrganizationTransferredAuditLog: OrganizationTransferredAuditLogRes
     return {
       userEmail: e.user_email,
       userId: e.user_id,
+      user: JSON.parse(e.metadata).user,
       __typename: 'AuditLogUserRecord',
     };
   },
