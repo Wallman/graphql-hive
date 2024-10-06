@@ -38,10 +38,11 @@ export const TargetDeletedAuditLog: TargetDeletedAuditLogResolvers = {
     }
     throw new Error('Invalid eventType');
   },
-  user: async parent => {
+  user: e => {
     return {
-      userEmail: parent.user_email,
-      userId: parent.user_id,
+      userEmail: e.user_email,
+      userId: e.user_id,
+      user: JSON.parse(e.metadata).user,
       __typename: 'AuditLogUserRecord',
     };
   },
