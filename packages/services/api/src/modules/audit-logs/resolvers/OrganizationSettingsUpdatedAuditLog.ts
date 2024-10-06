@@ -2,10 +2,7 @@ import { OrganizationSettingsUpdatedAuditLogResolvers } from '../../../__generat
 
 export const OrganizationSettingsUpdatedAuditLog: OrganizationSettingsUpdatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'ORGANIZATION_SETTINGS_UPDATED',
-  eventTime: e => {
-    const eventTime = new Date(e.event_time);
-    return eventTime.toISOString();
-  },
+  eventTime: e => e.event_time,
   id: e => e.id,
   updatedFields: e => {
     const parsedMetadata = JSON.parse(e.metadata);

@@ -2,10 +2,7 @@ import { UserJoinedAuditLogResolvers } from '../../../__generated__/types';
 
 export const UserJoinedAuditLog: UserJoinedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'USER_JOINED',
-  eventTime: e => {
-    const eventTime = new Date(e.event_time);
-    return eventTime.toISOString();
-  },
+  eventTime: e => e.event_time,
   id: e => e.id,
   organizationId: e => e.organization_id,
   inviteeEmail: e => {

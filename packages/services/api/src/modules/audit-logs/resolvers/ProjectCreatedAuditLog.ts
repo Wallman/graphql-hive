@@ -2,10 +2,7 @@ import { ProjectCreatedAuditLogResolvers } from '../../../__generated__/types';
 
 export const ProjectCreatedAuditLog: ProjectCreatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'PROJECT_CREATED',
-  eventTime: e => {
-    const eventTime = new Date(e.event_time);
-    return eventTime.toISOString();
-  },
+  eventTime: e => e.event_time,
   id: e => e.id,
   organizationId: e => e.organization_id,
   projectId: e => {

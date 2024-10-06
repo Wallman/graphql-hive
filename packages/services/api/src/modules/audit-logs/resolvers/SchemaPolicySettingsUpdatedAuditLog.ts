@@ -2,10 +2,7 @@ import { SchemaPolicySettingsUpdatedAuditLogResolvers } from '../../../__generat
 
 export const SchemaPolicySettingsUpdatedAuditLog: SchemaPolicySettingsUpdatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'SCHEMA_POLICY_SETTINGS_UPDATED',
-  eventTime: e => {
-    const eventTime = new Date(e.event_time);
-    return eventTime.toISOString();
-  },
+  eventTime: e => e.event_time,
   id: e => e.id,
   organizationId: e => e.organization_id,
   projectId: e => {
