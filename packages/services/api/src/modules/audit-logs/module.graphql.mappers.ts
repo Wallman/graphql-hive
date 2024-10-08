@@ -1,3 +1,22 @@
 import { AuditLogModel } from './providers/audit-logs-manager';
 
 export type AuditLogMapper = AuditLogModel;
+export type UserInvitedAuditLog = AuditLogModel;
+export type UserJoinedAuditLog = AuditLogModel;
+export type UserRemovedAuditLog = AuditLogModel;
+export type OrganizationSettingsUpdatedAuditLog = AuditLogModel;
+export type OrganizationTransferredAuditLog = AuditLogModel;
+export type ProjectCreatedAuditLog = AuditLogModel;
+export type ProjectSettingsUpdatedAuditLog = AuditLogModel;
+export type ProjectDeletedAuditLog = AuditLogModel;
+export type TargetCreatedAuditLog = AuditLogModel;
+export type TargetSettingsUpdatedAuditLog = AuditLogModel;
+export type TargetDeletedAuditLog = AuditLogModel;
+export type SchemaPolicySettingsUpdatedAuditLog = AuditLogModel;
+export type SchemaCheckedAuditLog = AuditLogModel;
+export type SchemaPublishAuditLog = AuditLogModel;
+export type SchemaDeletedAuditLog = AuditLogModel;
+export type RoleCreatedAuditLog = AuditLogModel;
+export type RoleAssignedAuditLog = AuditLogModel;
+export type RoleDeletedAuditLog = AuditLogModel;
+export type RoleUpdatedAuditLog = AuditLogModel;
