@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import * as Sentry from '@sentry/node';
 import { AuditLogManager } from '../../../audit-logs/providers/audit-logs-manager';
 import { AuthManager } from '../../../auth/providers/auth-manager';
 import { OrganizationManager } from '../../../organization/providers/organization-manager';
@@ -76,6 +77,14 @@ export const updateTargetValidationSettings: NonNullable<
     });
   } catch (error) {
     console.error('Failed to create audit log event', error);
+    Sentry.captureException(error, {
+      extra: {
+        input,
+        organization,
+        project,
+        target,
+      },
+    });
   }
 
   return {

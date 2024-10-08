@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import { AuditLogManager } from '../../../audit-logs/providers/audit-logs-manager';
 import { AuthManager } from '../../../auth/providers/auth-manager';
 import { IdTranslator } from '../../../shared/providers/id-translator';
@@ -54,6 +55,12 @@ export const setTargetValidation: NonNullable<MutationResolvers['setTargetValida
     });
   } catch (error) {
     console.error('Failed to create audit log event', error);
+    Sentry.captureException(error, {
+      extra: {
+        input,
+        result,
+      },
+    });
   }
 
   return result;

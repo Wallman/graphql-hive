@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import { AuditLogManager } from '../../../audit-logs/providers/audit-logs-manager';
 import { AuthManager } from '../../../auth/providers/auth-manager';
 import { IdTranslator } from '../../../shared/providers/id-translator';
@@ -43,6 +44,12 @@ export const experimental__updateTargetSchemaComposition: NonNullable<
     });
   } catch (error) {
     console.error('Failed to create audit log event', error);
+    Sentry.captureException(error, {
+      extra: {
+        input,
+        result,
+      },
+    });
   }
 
   return result;

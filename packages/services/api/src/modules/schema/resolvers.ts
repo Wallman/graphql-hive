@@ -35,6 +35,7 @@ import {
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
 import { z } from 'zod';
 import { CriticalityLevel } from '@graphql-inspector/core';
+import * as Sentry from '@sentry/node';
 import type * as Types from '../../__generated__/types';
 import { type DateRange } from '../../shared/entities';
 import { createPeriod, parseDateRangeInput, PromiseOrValue } from '../../shared/helpers';
@@ -177,6 +178,14 @@ export const resolvers: SchemaModule.Resolvers = {
           });
         } catch (error) {
           console.error('Failed to create audit log event', error);
+          Sentry.captureException(error, {
+            extra: {
+              input,
+              organization,
+              project,
+              target,
+            },
+          });
         }
       }
 
@@ -276,6 +285,14 @@ export const resolvers: SchemaModule.Resolvers = {
           });
         } catch (error) {
           console.error('Failed to create audit log event', error);
+          Sentry.captureException(error, {
+            extra: {
+              input,
+              organization,
+              project,
+              target,
+            },
+          });
         }
       }
 
@@ -340,6 +357,14 @@ export const resolvers: SchemaModule.Resolvers = {
           });
         } catch (error) {
           console.error('Failed to create audit log event', error);
+          Sentry.captureException(error, {
+            extra: {
+              input,
+              organization,
+              project,
+              target,
+            },
+          });
         }
       }
 
@@ -447,6 +472,14 @@ export const resolvers: SchemaModule.Resolvers = {
         });
       } catch (error) {
         console.error('Failed to create audit log event', error);
+        Sentry.captureException(error, {
+          extra: {
+            input,
+            organization,
+            project,
+            target,
+          },
+        });
       }
 
       return {
@@ -492,6 +525,13 @@ export const resolvers: SchemaModule.Resolvers = {
           });
         } catch (error) {
           console.error('Failed to create audit log event', error);
+          Sentry.captureException(error, {
+            extra: {
+              input,
+              organization,
+              project,
+            },
+          });
         }
       }
 
@@ -532,6 +572,13 @@ export const resolvers: SchemaModule.Resolvers = {
           });
         } catch (error) {
           console.error('Failed to create audit log event', error);
+          Sentry.captureException(error, {
+            extra: {
+              input,
+              organization,
+              project,
+            },
+          });
         }
       }
       return result;

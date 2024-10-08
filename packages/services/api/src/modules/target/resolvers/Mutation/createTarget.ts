@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import * as Sentry from '@sentry/node';
 import { AuditLogManager } from '../../../audit-logs/providers/audit-logs-manager';
 import { AuthManager } from '../../../auth/providers/auth-manager';
 import { IdTranslator } from '../../../shared/providers/id-translator';
@@ -62,6 +63,14 @@ export const createTarget: NonNullable<MutationResolvers['createTarget']> = asyn
     });
   } catch (error) {
     console.error('Failed to create audit log event', error);
+    Sentry.captureException(error, {
+      extra: {
+        input,
+        organization,
+        project,
+        target,
+      },
+    });
   }
 
   return {
