@@ -2,27 +2,15 @@ import type { OrganizationSettingsUpdatedAuditLogResolvers } from './../../../__
 
 export const OrganizationSettingsUpdatedAuditLog: OrganizationSettingsUpdatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'ORGANIZATION_SETTINGS_UPDATED',
-  eventTime: e => {
-    const time = new Date(e.event_time);
-    return time.toISOString();
-  },
+  eventTime: e => new Date(e.event_time).toISOString(),
   id: e => e.id,
-  updatedFields: e => {
-    const parsedMetadata = JSON.parse(e.metadata);
-    if (
-      e.event_action === 'ORGANIZATION_SETTINGS_UPDATED' &&
-      parsedMetadata.typeFields.eventType === 'ORGANIZATION_SETTINGS_UPDATED'
-    ) {
-      return parsedMetadata.typeFields.OrganizationSettingsUpdatedAuditLogSchema.updatedFields;
-    }
-    throw new Error('Invalid eventType');
-  },
+  updatedFields: e => e.metadata.projectSettingsUpdatedAuditLogSchema.updatedFields,
   organizationId: e => e.organization_id,
   user: e => {
     return {
       userEmail: e.user_email,
       userId: e.user_id,
-      user: JSON.parse(e.metadata).user,
+      user: e.metadata.user,
       __typename: 'AuditLogUserRecord',
     };
   },

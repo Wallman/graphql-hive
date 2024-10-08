@@ -5,15 +5,16 @@ import { ClickHouse, sql } from '../../operations/providers/clickhouse-client';
 import { Logger } from '../../shared/providers/logger';
 import { AuditLogEvent, auditLogSchema } from './audit-logs-types';
 
-const auditLogDbObject = z.object({
+export const auditLogDbObject = z.object({
   id: z.string(),
   event_time: z.string(),
   user_id: z.string(),
   user_email: z.string(),
   organization_id: z.string(),
   event_action: z.string(),
-  metadata: z.string(),
+  metadata: z.string().transform(x => JSON.parse(x)),
 });
+
 export type AuditLogModel = z.infer<typeof auditLogDbObject>;
 
 const auditLogCount = z.object({
@@ -35,36 +36,40 @@ export class AuditLogManager {
   }
 
   async createLogAuditEvent(event: AuditLogEvent): Promise<void> {
-    const { eventType, organizationId, user } = event;
-    this.logger.info('Creating a log audit event (event=%o)', event);
+    try {
+      const { eventType, organizationId, user } = event;
+      this.logger.info('Creating a log audit event (event=%o)', event);
 
-    const parsedEvent = auditLogSchema.parse(event);
-    const metadata = {
-      user: user.user,
-      ...parsedEvent,
-    };
+      const parsedEvent = auditLogSchema.parse(event);
+      const metadata = {
+        user: user.user,
+        ...parsedEvent,
+      };
 
-    const eventMetadata = JSON.stringify(metadata);
-    const eventTime = new Date();
+      const eventMetadata = JSON.stringify(metadata);
+      const eventTime = new Date();
 
-    const values = [
-      eventTime,
-      user.userId,
-      user.userEmail,
-      organizationId,
-      eventType,
-      eventMetadata,
-    ];
+      const values = [
+        eventTime,
+        user.userId,
+        user.userEmail,
+        organizationId,
+        eventType,
+        eventMetadata,
+      ];
 
-    await this.clickHouse.insert({
-      query: sql`
-      INSERT INTO audit_log
-      (event_time, user_id, user_email, organization_id, event_action, metadata)
-      FORMAT CSV`,
-      data: [values],
-      timeout: 5000,
-      queryId: 'create-audit-log',
-    });
+      await this.clickHouse.insert({
+        query: sql`
+        INSERT INTO audit_log
+        (event_time, user_id, user_email, organization_id, event_action, metadata)
+        FORMAT CSV`,
+        data: [values],
+        timeout: 5000,
+        queryId: 'create-audit-log',
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async getPaginatedAuditLogs(props: QueryAuditLogsArgs): Promise<AuditLogModel[]> {

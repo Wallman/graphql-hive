@@ -2,50 +2,17 @@ import type { TargetCreatedAuditLogResolvers } from './../../../__generated__/ty
 
 export const TargetCreatedAuditLog: TargetCreatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'TARGET_CREATED',
-  eventTime: e => {
-    const time = new Date(e.event_time);
-    return time.toISOString();
-  },
+  eventTime: e => new Date(e.event_time).toISOString(),
   id: e => e.id,
   organizationId: e => e.organization_id,
-  projectId: e => {
-    const parsedMetadata = JSON.parse(e.metadata);
-
-    if (
-      e.event_action === 'TARGET_CREATED' &&
-      parsedMetadata.typeFields.eventType === 'TARGET_CREATED'
-    ) {
-      return parsedMetadata.typeFields.TargetCreatedAuditLogSchema.projectId;
-    }
-    throw new Error('Invalid eventType');
-  },
-  targetId: e => {
-    const parsedMetadata = JSON.parse(e.metadata);
-
-    if (
-      e.event_action === 'TARGET_CREATED' &&
-      parsedMetadata.typeFields.eventType === 'TARGET_CREATED'
-    ) {
-      return parsedMetadata.typeFields.TargetCreatedAuditLogSchema.targetId;
-    }
-    throw new Error('Invalid eventType');
-  },
-  targetName: e => {
-    const parsedMetadata = JSON.parse(e.metadata);
-
-    if (
-      e.event_action === 'TARGET_CREATED' &&
-      parsedMetadata.typeFields.eventType === 'TARGET_CREATED'
-    ) {
-      return parsedMetadata.typeFields.TargetCreatedAuditLogSchema.targetName;
-    }
-    throw new Error('Invalid eventType');
-  },
+  projectId: e => e.metadata.targetCreatedAuditLogSchema.projectId,
+  targetName: e => e.metadata.targetCreatedAuditLogSchema.targetName,
+  targetId: e => e.metadata.targetCreatedAuditLogSchema.target,
   user: e => {
     return {
       userEmail: e.user_email,
       userId: e.user_id,
-      user: JSON.parse(e.metadata).user,
+      user: e.metadata.user,
       __typename: 'AuditLogUserRecord',
     };
   },

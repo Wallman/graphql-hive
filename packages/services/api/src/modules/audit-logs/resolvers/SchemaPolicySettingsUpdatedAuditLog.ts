@@ -2,39 +2,16 @@ import type { SchemaPolicySettingsUpdatedAuditLogResolvers } from './../../../__
 
 export const SchemaPolicySettingsUpdatedAuditLog: SchemaPolicySettingsUpdatedAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'SCHEMA_POLICY_SETTINGS_UPDATED',
-  eventTime: e => {
-    const time = new Date(e.event_time);
-    return time.toISOString();
-  },
+  eventTime: e => new Date(e.event_time).toISOString(),
   id: e => e.id,
   organizationId: e => e.organization_id,
-  projectId: e => {
-    const parsedMetadata = JSON.parse(e.metadata);
-
-    if (
-      e.event_action === 'SCHEMA_POLICY_SETTINGS_UPDATED' &&
-      parsedMetadata.typeFields.eventType === 'SCHEMA_POLICY_SETTINGS_UPDATED'
-    ) {
-      return parsedMetadata.typeFields.SchemaPolicySettingsUpdatedAuditLogSchema.projectId;
-    }
-    throw new Error('Invalid eventType');
-  },
-  updatedFields: e => {
-    const parsedMetadata = JSON.parse(e.metadata);
-
-    if (
-      e.event_action === 'SCHEMA_POLICY_SETTINGS_UPDATED' &&
-      parsedMetadata.typeFields.eventType === 'SCHEMA_POLICY_SETTINGS_UPDATED'
-    ) {
-      return parsedMetadata.typeFields.SchemaPolicySettingsUpdatedAuditLogSchema.updatedFields;
-    }
-    throw new Error('Invalid eventType');
-  },
+  projectId: e => e.metadata.schemaPolicySettingsUpdatedAuditLogSchema.projectId,
+  updatedFields: e => e.metadata.schemaPolicySettingsUpdatedAuditLogSchema.updatedFields,
   user: e => {
     return {
       userEmail: e.user_email,
       userId: e.user_id,
-      user: JSON.parse(e.metadata).user,
+      user: e.metadata.user,
       __typename: 'AuditLogUserRecord',
     };
   },

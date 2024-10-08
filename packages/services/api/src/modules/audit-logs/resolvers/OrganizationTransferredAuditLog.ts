@@ -2,37 +2,16 @@ import type { OrganizationTransferredAuditLogResolvers } from './../../../__gene
 
 export const OrganizationTransferredAuditLog: OrganizationTransferredAuditLogResolvers = {
   __isTypeOf: e => e.event_action === 'ORGANIZATION_TRANSFERRED',
-  eventTime: e => {
-    const time = new Date(e.event_time);
-    return time.toISOString();
-  },
+  eventTime: e => new Date(e.event_time).toISOString(),
   id: e => e.id,
-  newOwnerEmail: e => {
-    const parsedMetadata = JSON.parse(e.metadata);
-    if (
-      e.event_action === 'ORGANIZATION_TRANSFERRED' &&
-      parsedMetadata.eventType === 'ORGANIZATION_TRANSFERRED'
-    ) {
-      return parsedMetadata.typeFields.OrganizationTransferredAuditLogSchema.newOwnerEmail;
-    }
-    throw new Error('Invalid eventType');
-  },
-  newOwnerId: e => {
-    const parsedMetadata = JSON.parse(e.metadata);
-    if (
-      e.event_action === 'ORGANIZATION_TRANSFERRED' &&
-      parsedMetadata.typeFields.eventType === 'ORGANIZATION_TRANSFERRED'
-    ) {
-      return parsedMetadata.typeFields.OrganizationTransferredAuditLogSchema.newOwnerId;
-    }
-    throw new Error('Invalid eventType');
-  },
+  newOwnerEmail: e => e.metadata.organizationTransferredAuditLogSchema.newOwnerEmail,
+  newOwnerId: e => e.metadata.organizationTransferredAuditLogSchema.newOwnerId,
   organizationId: e => e.organization_id,
   user: e => {
     return {
       userEmail: e.user_email,
       userId: e.user_id,
-      user: JSON.parse(e.metadata).user,
+      user: e.metadata.user,
       __typename: 'AuditLogUserRecord',
     };
   },
