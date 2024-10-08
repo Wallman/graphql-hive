@@ -1,6 +1,6 @@
 import { Injectable, Scope } from 'graphql-modules';
 import { z } from 'zod';
-import { QueryAuditLogsArgs } from '../../../__generated__/types';
+import { QueryAuditLogsArgs } from '../../../__generated__/types.next';
 import { ClickHouse, sql } from '../../operations/providers/clickhouse-client';
 import { Logger } from '../../shared/providers/logger';
 import { AuditLogEvent, auditLogSchema } from './audit-logs-types';

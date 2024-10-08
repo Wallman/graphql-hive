@@ -1,4 +1,4 @@
-import type { MutationResolvers } from './../../../../__generated__/types';
+import type { MutationResolvers } from './../../../../__generated__/types.next';
 
 // TODO: Export audit logs to a file
 export const exportAuditLogsToFile: NonNullable<

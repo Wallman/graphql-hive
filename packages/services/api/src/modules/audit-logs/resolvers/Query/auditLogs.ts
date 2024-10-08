@@ -1,5 +1,5 @@
 import { AuditLogManager } from '../../providers/audit-logs-manager';
-import type { QueryResolvers } from './../../../../__generated__/types';
+import type { QueryResolvers } from './../../../../__generated__/types.next';
 
 export const auditLogs: NonNullable<QueryResolvers['auditLogs']> = async (_parent, arg, ctx) => {
   const countAuditLogs = await ctx.injector.get(AuditLogManager).getAuditLogsCount();
