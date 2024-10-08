@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import type { ProjectCreatedAuditLogResolvers } from './../../../__generated__/types.next';
 
 export const ProjectCreatedAuditLog: ProjectCreatedAuditLogResolvers = {
